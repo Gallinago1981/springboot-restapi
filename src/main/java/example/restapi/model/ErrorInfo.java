@@ -6,15 +6,11 @@ import org.springframework.validation.FieldError;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Response {
-    private String resultCode;
+
+public class ErrorInfo {
     private List<Error> error;
 
-    public Response() {}
-
-    public Response(BindingResult bindingResult) {
-        this.resultCode = "NG";
-
+    public ErrorInfo(BindingResult bindingResult) {
         this.error = bindingResult.getAllErrors().stream()
                 .filter(o -> o instanceof FieldError)
                 .map(o -> (FieldError) o)
@@ -22,15 +18,6 @@ public class Response {
                 .collect(Collectors.toList());
 
     }
-
-    public String getResultCode() {
-        return resultCode;
-    }
-
-    public void setResultCode(String resultCode) {
-        this.resultCode = resultCode;
-    }
-
     public List<Error> getError() {
         return error;
     }

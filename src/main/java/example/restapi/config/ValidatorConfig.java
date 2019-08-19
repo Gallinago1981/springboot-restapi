@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+/**
+ * Bean Validation で利用するエラーメッセージをValidationMessageから変更する
+ */
 @Configuration
 public class ValidatorConfig {
     @Bean

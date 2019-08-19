@@ -1,7 +1,10 @@
 package example.restapi.controller;
 
-import example.restapi.model.Response;
+import example.restapi.model.SearchResponse;
+import example.restapi.model.SearchParam;
 import example.restapi.model.Student;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,40 +12,37 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/student")
+
 public class RestApiController {
 
+    Logger logger = LoggerFactory.getLogger(RestApiController.class);
 
-
-    @GetMapping(produces = "application/json;charset=UTF-8")
-    public List<Student> get() {
+    @GetMapping(path={"/student", "/student/{id}"}, produces = "application/json;charset=UTF-8")
+    public SearchResponse get(@Valid @ModelAttribute SearchParam searchParam, @PathVariable(required = false) Integer id, BindingResult bindingResult ) {
+        if (bindingResult.hasErrors()) {
+            return new SearchResponse(bindingResult);
+        }
         Student student = new Student();
         student.setId(1);
         student.setName("山田太郎");
         student.setNameKana("ヤマダタロウ");
         student.setGrade(1);
         student.setSubject("経済学部");
-        return List.of(student);
-    }
-
-    @GetMapping(path = "/{id}", produces = "application/json;charset=UTF-8")
-    public Student getStudent(@PathVariable Integer id) {
-        Student student = new Student();
-        student.setId(2);
-        student.setName("山田次郎");
-        student.setNameKana("ヤマダジロウ");
-        student.setGrade(1);
-        student.setSubject("経済学部");
-        return student;
+        logger.info(searchParam.toString());
+        SearchResponse response = new SearchResponse();
+        response.setResultCode("OK");
+        response.setStudentList(List.of(student));
+        return response;
     }
 
 
-    @PostMapping(produces = "application/json;charset=UTF-8")
-    public Response post(@RequestBody @Valid Student student, BindingResult bindingResult) {
+
+    @PostMapping(path="/student", produces = "application/json;charset=UTF-8")
+    public SearchResponse post(@RequestBody @Valid Student student, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new Response(bindingResult);
+            return new SearchResponse(bindingResult);
         }
-        Response response = new Response();
+        SearchResponse response = new SearchResponse();
         response.setResultCode("OK");
         return response;
     }
