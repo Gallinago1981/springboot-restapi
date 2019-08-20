@@ -1,5 +1,6 @@
 package example.restapi.model;
 
+import example.restapi.type.SubjectType;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Max;
@@ -16,7 +17,7 @@ public class Student {
     @NotNull(message = "{ERR001}")
     private String nameKana;
     @NotNull(message = "{ERR001}")
-    private String subject;
+    private SubjectType subject;
     @Min(value = 1, message="{ERR002}")
     @Max(value = 4, message="{ERR003}")
     private Integer grade;
@@ -45,11 +46,11 @@ public class Student {
         this.nameKana = nameKana;
     }
 
-    public String getSubject() {
+    public SubjectType getSubject() {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject(SubjectType subject) {
         this.subject = subject;
     }
 

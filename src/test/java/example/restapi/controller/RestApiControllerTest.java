@@ -4,17 +4,24 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import example.restapi.model.SearchResponse;
 import example.restapi.model.Student;
+import example.restapi.type.SubjectType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -26,6 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class RestApiControllerTest {
+
+    Logger logger = LoggerFactory.getLogger(RestApiControllerTest.class);
 
     private MockMvc mockMvc;
 
@@ -61,7 +70,7 @@ public class RestApiControllerTest {
         student.setName("山田太郎");
         student.setNameKana("ヤマダタロウ");
         student.setGrade(1);
-        student.setSubject("経済学部");
+        student.setSubject(SubjectType.経営学部);
         searchResponse.setStudentList(List.of(student));
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(searchResponse);
@@ -83,9 +92,10 @@ public class RestApiControllerTest {
         student.setName("山田太郎");
         student.setNameKana("ヤマダタロウ");
         student.setGrade(1);
-        student.setSubject("経済学部");
+        student.setSubject(SubjectType.経営学部);
         searchResponse.setStudentList(List.of(student));
         ObjectMapper objectMapper = new ObjectMapper();
+
         return objectMapper.writeValueAsString(searchResponse);
     }
     @DisplayName("生徒詳細情報の取得時に不正ID指定")
@@ -113,22 +123,24 @@ public class RestApiControllerTest {
         student.setName("山田太郎");
         student.setNameKana("ヤマダタロウ");
         student.setGrade(1);
-        student.setSubject("経済学部");
+        student.setSubject(SubjectType.経営学部);
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(student);
+        String testJson = objectMapper.writeValueAsString(student);
+        logger.info(testJson);
+        return testJson;
     }
 
     @DisplayName("学生情報の登録(入力エラー)")
     @Test
     public void post02() throws Exception {
-        mockMvc.perform(
+        ResultActions resultActions = mockMvc.perform(
                 post("/student")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(makeTestData02())
-        )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("resultCode", is("NG")))
-                .andExpect(jsonPath("errorInfo.error", hasSize(1)));
+                        .content(makeTestData02()));
+
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("resultCode", is("NG")));
+        resultActions.andExpect(jsonPath("errorInfo.error", hasSize(1)));
 
 
     }
@@ -137,7 +149,7 @@ public class RestApiControllerTest {
         student.setName("山田太郎");
         student.setNameKana("ヤマダタロウ");
         student.setGrade(1);
-        student.setSubject("経済学部");
+        student.setSubject(SubjectType.経営学部);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(student);
     }

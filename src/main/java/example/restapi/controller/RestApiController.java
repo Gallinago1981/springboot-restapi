@@ -1,8 +1,10 @@
 package example.restapi.controller;
 
+import example.restapi.model.RegistResponse;
 import example.restapi.model.SearchResponse;
 import example.restapi.model.SearchParam;
 import example.restapi.model.Student;
+import example.restapi.type.SubjectType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
@@ -27,7 +29,7 @@ public class RestApiController {
         student.setName("山田太郎");
         student.setNameKana("ヤマダタロウ");
         student.setGrade(1);
-        student.setSubject("経済学部");
+        student.setSubject(SubjectType.経営学部);
         logger.info(searchParam.toString());
         SearchResponse response = new SearchResponse();
         response.setResultCode("OK");
@@ -38,11 +40,11 @@ public class RestApiController {
 
 
     @PostMapping(path="/student", produces = "application/json;charset=UTF-8")
-    public SearchResponse post(@RequestBody @Valid Student student, BindingResult bindingResult) {
+    public RegistResponse post(@RequestBody @Valid Student student, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new SearchResponse(bindingResult);
+            return new RegistResponse(bindingResult);
         }
-        SearchResponse response = new SearchResponse();
+        RegistResponse response = new RegistResponse();
         response.setResultCode("OK");
         return response;
     }

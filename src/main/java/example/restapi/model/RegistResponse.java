@@ -2,8 +2,6 @@ package example.restapi.model;
 
 import org.springframework.validation.BindingResult;
 
-import java.util.List;
-
 public class RegistResponse {
     private String resultCode;
     private ErrorInfo errorInfo;
@@ -14,7 +12,6 @@ public class RegistResponse {
         this.errorInfo = new ErrorInfo(bindingResult);
     }
 
-
     public String getResultCode() {
         return resultCode;
     }
@@ -23,5 +20,11 @@ public class RegistResponse {
         this.resultCode = resultCode;
     }
 
+    public ErrorInfo getErrorInfo() {
+        return errorInfo;
+    }
 
+    public void setErrorInfo(ErrorInfo errorInfo) {
+        this.errorInfo = errorInfo;
+    }
 }
