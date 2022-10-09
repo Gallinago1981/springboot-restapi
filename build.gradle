@@ -23,3 +23,6 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-commons:1.5.1")
 }
 
+tasks.getByName("bootJar") {
+    archiveFileName.set("app.jar")
+}
