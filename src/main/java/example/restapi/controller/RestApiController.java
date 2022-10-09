@@ -26,8 +26,8 @@ public class RestApiController {
         }
         Student student = new Student();
         student.setId(1);
-        student.setName("山田太郎");
-        student.setNameKana("ヤマダタロウ");
+        student.setName("山田花子");
+        student.setNameKana("ヤマダハナコ");
         student.setGrade(1);
         student.setSubject(SubjectType.経営学部);
         logger.info(searchParam.toString());
