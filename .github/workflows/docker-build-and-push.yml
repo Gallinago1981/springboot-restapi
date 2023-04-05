@@ -34,7 +34,7 @@ jobs:
         with:
           registry: ghcr.io
           username: 'gallinago1981'
-          password: ${{ GITHUB_TOKEN }}
+          password: ${{ env.GITHUB_TOKEN }}
       -
         name: get push tag
         run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
@@ -47,7 +47,7 @@ jobs:
         with:
           context: .
           push: true
-          github-token: ${{ GITHUB_TOKEN }}
+          github-token: ${{ env.GITHUB_TOKEN }}
           tags:
             ghcr.io/gallinago1981/springboot-restapi:${{ env.TAG }},
             ghcr.io/gallinago1981/springboot-restapi:latest
