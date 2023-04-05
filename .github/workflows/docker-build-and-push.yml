@@ -38,10 +38,11 @@ jobs:
         run: ./gradlew bootJar -x test -x check
       -
         name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           push: true
+          github_token: ${{ steps.generate_token.outputs.token }}
           tags:
             ghcr.io/gallinago1981/springboot-restapi:${{ env.TAG }},
             ghcr.io/gallinago1981/springboot-restapi:latest
