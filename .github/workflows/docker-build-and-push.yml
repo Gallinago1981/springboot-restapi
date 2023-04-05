@@ -24,6 +24,17 @@ jobs:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
       -
+        name: Use Token
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+      -
+        name: Login to Github repository
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: 'gallinago1981'
+          password: ${{ GITHUB_TOKEN }}
+      -
         name: get push tag
         run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
       -
@@ -35,7 +46,7 @@ jobs:
         with:
           context: .
           push: true
-          github-token: ${{ steps.generate_token.outputs.token }}
+          github-token: ${{ GITHUB_TOKEN }}
           tags:
             ghcr.io/gallinago1981/springboot-restapi:${{ env.TAG }},
             ghcr.io/gallinago1981/springboot-restapi:latest
