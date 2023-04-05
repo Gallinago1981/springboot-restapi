@@ -25,6 +25,7 @@ jobs:
           private_key: ${{ secrets.PRIVATE_KEY }}
       -
         name: Use Token
+        run: echo "$GITHUB_TOKEN"
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
       -
